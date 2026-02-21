@@ -38,7 +38,7 @@ fun MainScreen() {
         NavHost(
             navController = navController,
             startDestination = "books",
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             composable("books") { BooksScreen() }
             composable("include") { IncludeScreen() }
