@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">杏仁阅读</string>
+    <string name="nav_books">书籍</string>
+    <string name="nav_include">导入</string>
+    <string name="nav_settings">设置</string>
+</resources>
