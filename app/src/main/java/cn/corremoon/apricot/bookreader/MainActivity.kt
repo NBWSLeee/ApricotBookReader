@@ -1,9 +1,9 @@
 package cn.corremoon.apricot.bookreader
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,7 +17,7 @@ import cn.corremoon.apricot.bookreader.screen.IncludeScreen
 import cn.corremoon.apricot.bookreader.screen.SettingsScreen
 import cn.corremoon.apricot.bookreader.ui.theme.ApricotBookReaderTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

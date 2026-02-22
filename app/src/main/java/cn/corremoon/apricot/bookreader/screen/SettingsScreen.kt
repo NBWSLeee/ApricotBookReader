@@ -1,7 +1,10 @@
 package cn.corremoon.apricot.bookreader.screen
 
 import android.content.Intent
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,11 +30,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import cn.corremoon.apricot.bookreader.AboutActivity
 import cn.corremoon.apricot.bookreader.R
 import kotlinx.coroutines.launch
@@ -44,6 +50,21 @@ fun SettingsScreen() {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+    val languages = listOf(
+        R.string.follow_system to "system",
+        R.string.simplified_chinese to "zh-CN",
+        R.string.english to "en-US"
+    )
+    var selectedLanguage by remember { mutableStateOf(AppCompatDelegate.getApplicationLocales().toLanguageTags()) }
+
+    @Composable
+    fun GetLanguageDisplayName(code: String): String {
+        val currentCode = code.ifEmpty { "system" }
+        val (titleRes) = languages.find { (_, langCode) ->
+            if (langCode == "system") currentCode == "system" else currentCode.startsWith(langCode)
+        } ?: (R.string.follow_system to "system")
+        return stringResource(id = titleRes)
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -73,10 +94,16 @@ fun SettingsScreen() {
                         )
                     },
                     trailingContent = {
-                        Icon(
-                            Icons.Default.KeyboardArrowDown,
-                            contentDescription = null
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(text = GetLanguageDisplayName(code = selectedLanguage))
+                            Icon(
+                                Icons.Default.KeyboardArrowDown,
+                                contentDescription = null
+                            )
+                        }
                     },
                     modifier = Modifier.clickable { showBottomSheet = true }
                 )
@@ -110,20 +137,18 @@ fun SettingsScreen() {
             },
             sheetState = sheetState
         ) {
-            val languages = listOf(
-                R.string.follow_system to "system",
-                R.string.simplified_chinese to "zh",
-                R.string.english to "en"
-            )
-            var selectedLanguage by remember { mutableStateOf("system") } // Default
-
             LazyColumn {
                 items(languages.size) { index ->
                     val (titleRes, code) = languages[index]
                     ListItem(
                         headlineContent = { Text(stringResource(id = titleRes)) },
                         trailingContent = {
-                            if (selectedLanguage == code) {
+                            val isSelected = if (code == "system") {
+                                selectedLanguage.isEmpty() || selectedLanguage == "system"
+                            } else {
+                                selectedLanguage.startsWith(code)
+                            }
+                            if (isSelected) {
                                 Icon(
                                     Icons.Default.Check,
                                     contentDescription = "Selected"
@@ -132,14 +157,16 @@ fun SettingsScreen() {
                         },
                         modifier = Modifier.clickable {
                             selectedLanguage = code
-                            // TODO: Add logic to change app language here
                             scope.launch {
                                 sheetState.hide()
-                            }.invokeOnCompletion {
-                                if (!sheetState.isVisible) {
-                                    @Suppress("AssignedValueIsNeverRead")
-                                    showBottomSheet = false
+                                @Suppress("AssignedValueIsNeverRead")
+                                showBottomSheet = false
+                                val localeList = if (code == "system") {
+                                    LocaleListCompat.getEmptyLocaleList()
+                                } else {
+                                    LocaleListCompat.forLanguageTags(code)
                                 }
+                                AppCompatDelegate.setApplicationLocales(localeList)
                             }
                         },
                         colors = ListItemDefaults.colors(containerColor = Color.Transparent)
