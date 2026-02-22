@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ApricotBookReader">
         <activity
+            android:name=".AboutActivity"
+            android:exported="false"
+            android:label="@string/about"
+            android:theme="@style/Theme.ApricotBookReader" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

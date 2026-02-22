@@ -12,7 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cn.corremoon.apricot.bookreader.component.BottomNavigationBar
-import cn.corremoon.apricot.bookreader.screen.AboutScreen
 import cn.corremoon.apricot.bookreader.screen.BooksScreen
 import cn.corremoon.apricot.bookreader.screen.IncludeScreen
 import cn.corremoon.apricot.bookreader.screen.SettingsScreen
@@ -33,6 +32,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { innerPadding ->
@@ -43,8 +43,7 @@ fun MainScreen() {
         ) {
             composable("books") { BooksScreen() }
             composable("include") { IncludeScreen() }
-            composable("settings") { SettingsScreen(navController = navController) }
-            composable("about") { AboutScreen(navController = navController) }
+            composable("settings") { SettingsScreen() }
         }
     }
 }

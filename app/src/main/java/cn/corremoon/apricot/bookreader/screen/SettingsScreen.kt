@@ -1,5 +1,6 @@
 package cn.corremoon.apricot.bookreader.screen
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,14 +30,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import cn.corremoon.apricot.bookreader.AboutActivity
 import cn.corremoon.apricot.bookreader.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen() {
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -93,7 +96,7 @@ fun SettingsScreen(navController: NavController) {
                             contentDescription = null
                         )
                     },
-                    modifier = Modifier.clickable { navController.navigate("about") }
+                    modifier = Modifier.clickable { context.startActivity(Intent(context, AboutActivity::class.java)) }
                 )
             }
         }
