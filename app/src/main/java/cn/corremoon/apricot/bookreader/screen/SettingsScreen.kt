@@ -59,9 +59,11 @@ fun SettingsScreen() {
 
     @Composable
     fun GetLanguageDisplayName(code: String): String {
-        val currentCode = code.ifEmpty { "system" }
+        if (code.isEmpty()) {
+            return stringResource(id = R.string.follow_system)
+        }
         val (titleRes) = languages.find { (_, langCode) ->
-            if (langCode == "system") currentCode == "system" else currentCode.startsWith(langCode)
+            if (langCode == "system") code == "system" else code.startsWith(langCode)
         } ?: (R.string.follow_system to "system")
         return stringResource(id = titleRes)
     }
