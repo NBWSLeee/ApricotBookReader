@@ -104,7 +104,10 @@ fun SettingsScreen() {
 
     if (showBottomSheet) {
         ModalBottomSheet(
-            onDismissRequest = { showBottomSheet = false },
+            onDismissRequest = {
+                @Suppress("AssignedValueIsNeverRead")
+                showBottomSheet = false
+            },
             sheetState = sheetState
         ) {
             val languages = listOf(
@@ -134,6 +137,7 @@ fun SettingsScreen() {
                                 sheetState.hide()
                             }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
+                                    @Suppress("AssignedValueIsNeverRead")
                                     showBottomSheet = false
                                 }
                             }
